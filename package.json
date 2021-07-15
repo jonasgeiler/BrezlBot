@@ -2,7 +2,7 @@
 	"name": "brezlbot",
 	"version": "1.0.0",
 	"license": "MIT",
-	"description": "A fork of the HeyTacoBot for Telegram which uses pretzels 🥨 instead of tacos 🌮 and only speaks Bavarian!",
+	"description": "A fun little Telegram bot I've written for my friends and me, which allows users to reward others by giving them pretzels 🥨",
 	"author": "Skayo (https://skayo.dev)",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
@@ -12,7 +12,8 @@
 		"src"
 	],
 	"scripts": {
-		"start": "ts-node src/main.ts"
+		"start": "ts-node src/main.ts",
+		"build": "tsc -p tsconfig.json"
 	},
 	"dependencies": {
 		"cron": "^1.8.2",
