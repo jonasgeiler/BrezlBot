@@ -12,7 +12,8 @@
 		"src"
 	],
 	"scripts": {
-		"start": "ts-node src/main.ts",
+		"dev": "ts-node src/main.ts",
+		"start": "node dist/main.js",
 		"build": "tsc -p tsconfig.json"
 	},
 	"dependencies": {
