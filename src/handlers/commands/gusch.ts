@@ -11,7 +11,7 @@ export default (bot: TelegramBot) => {
 		if (member.status !== 'administrator' && member.status !== 'creator') {
 			await sendMessage(
 				bot, msg,
-				`<b>Tut ma leid, aba nua Admins könna desn Befehl vawendn :(</b>`,
+				`<b>Tut ma leid, aba nua Administratorn könna desn Befehl vawendn :(</b>`,
 				`Dia vatraut oafach niemand &#x1F937;`,
 			);
 

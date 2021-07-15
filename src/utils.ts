@@ -27,21 +27,19 @@ export function scheduleJob(time: number | string, job: Function) {
 		}
 	}
 
-	console.log(`Job scheduled for every ${millis}ms (${time})`);
-
 	setInterval(job, millis);
+
+	console.log(`Job scheduled for every ${millis}ms (${time})`);
 }
 
 export function commandRegex(command: string, args: string[] = []) {
 	let regex = `^\\/${command}(?:@${config.bot.username})?`;
 
-	if (args.length > 0) {
-		for (let arg of args) {
-			if (arg === 'number') {
-				regex += ' (\\d+)';
-			} else {
-				regex += ' (.+)';
-			}
+	for (let arg of args) {
+		if (arg === 'number') {
+			regex += ' (\\d+)';
+		} else {
+			regex += ' (.+)';
 		}
 	}
 
