@@ -19,8 +19,14 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+      - name: Install pnpm
+        run: npm i -g pnpm
+
       - name: Install deps and build (with cache)
         uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+          install-command: pnpm i
 
       - name: Lint
         run: yarn lint
