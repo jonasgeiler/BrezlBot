@@ -14,12 +14,16 @@ const bot = new TelegramBot(
 );
 
 // Register all handlers
-for (let handler of Object.values(handlers)) {
+for (let [handlerName, handler] of Object.entries(handlers)) {
 	handler(bot);
+
+	console.log(`Handler "${handlerName}" registered.`);
 }
 
 // Start all scheduled jobs
-for (let job of Object.values(jobs)) {
+for (let [jobName, job] of Object.entries(jobs)) {
 	// @ts-ignore because some jobs don't require the bot as parameter
 	job(bot);
+
+	console.log(`Job "${jobName}" scheduled.`);
 }
