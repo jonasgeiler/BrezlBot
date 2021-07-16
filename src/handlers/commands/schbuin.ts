@@ -44,6 +44,7 @@ Ma konn bis zua <code>3</code> Brezl <b>valiarn</b> und bis zua <code>3</code> <
 			}
 
 			// Wait 5 seconds until animation stopped
+			await bot.sendChatAction(msg.chat.id, 'typing');
 			await wait(5000);
 
 			brezls = getBrezls(msg.chat.id, msg.from!.id);

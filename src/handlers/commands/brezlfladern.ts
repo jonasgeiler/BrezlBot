@@ -1,5 +1,5 @@
 import type TelegramBot from 'node-telegram-bot-api';
-import { commandRegex, getBrezls, getLastRobbery, getRandomInt, isForwarded, isFromUser, isGroupMessage, sendMessage, setBrezls, setLastRobbery, storeUser } from '../../utils';
+import { commandRegex, getBrezls, getLastRobbery, getRandomInt, isForwarded, isFromUser, isGroupMessage, sendMessage, setBrezls, setLastRobbery, storeUser, wait } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('brezlfladern'), async msg => {
@@ -19,6 +19,10 @@ export default (bot: TelegramBot) => {
 
 			return;
 		}
+
+		// Wait 1 second
+		await bot.sendChatAction(msg.chat.id, 'typing');
+		await wait(1000);
 
 		let rewardList = [];
 
