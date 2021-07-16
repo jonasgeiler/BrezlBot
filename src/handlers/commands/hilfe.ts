@@ -13,7 +13,9 @@ export default (bot: TelegramBot) => {
 
 /meibrezln - Zeigt deinen Brezl-Kontostand an
 
-/schbuin - Starte a Glücksschbui, bei am ma Brezl gwinna oda valiarn konn
+/schbuin - Starte a Glücksschbui, bei dem ma Brezl gwinna oda valiarn konn
+
+/brezlfladern - Vasuche vo am Brezlstand a boah Brezl zua fladern (gäd nua 1-moi pro Dog)
 
 /gusch - Schoidet den Gusch-Modus ein oda aus. Wenn ea eingschoidet is, san manche moana Nochrichdn kürza. (nua fia Administratorn vafügbar)
 
