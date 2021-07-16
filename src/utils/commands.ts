@@ -1,6 +1,6 @@
 import config from '../config';
 
-export function commandRegex(command: string, args: string[] = []) {
+export function commandRegex(command: string, args: string[] = []): RegExp {
 	let regex = `^\\/${command}(?:@${config.bot.username})?`;
 
 	for (let arg of args) {

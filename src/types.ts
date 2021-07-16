@@ -4,8 +4,24 @@ export interface ChatMember {
 	brezls: number,
 }
 
+export interface ChatMembers {
+	[id: string]: ChatMember
+}
+
 export interface ChatSettings {
 	sendLess: boolean,
 	autoHide: boolean,
 	autoHideDelay: number,
+}
+
+// Module overwrites
+declare module "node-telegram-bot-api" {
+	interface Dice {
+		emoji: string,
+		value: number,
+	}
+
+	interface Message {
+		dice: Dice,
+	}
 }

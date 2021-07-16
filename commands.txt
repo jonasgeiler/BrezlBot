@@ -1,0 +1,6 @@
+topbrezler - 🏅 Zeigt de Top Brezler im aktuelln Chod an
+meibrezln - 🥨 Zeigt deinen Brezl-Kontostand an
+schbuin - 🎲 Starte a Glücksschbui, bei am ma Brezl gwinna oda valiarn konn
+gusch - 🤐 Schoidet den Gusch-Modus ein oda aus. Wenn ea eingschoidet is, san manche moana Nochrichdn kürza. (nua fia Administratorn vafügbar)
+schleichdi - 🖕 Schoidet den Schleich-di-Modus ein oda aus. Wenn ea eingschoidet is, vaschwindn manche moana Nochrichdn noch oana bestimmdn Zeid. (nua fia Administratorn vafügbar)
+schleichdi_wartezeid - ⏱ Stäit a noch wia vuin Minudn de Nochrichdn vaschwindn, wenn da Schleich-di-Modus eingschoiden is. (nua fia Administratorn vafügbar)

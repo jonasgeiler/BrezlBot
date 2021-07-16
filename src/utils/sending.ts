@@ -1,5 +1,6 @@
 import TelegramBot, { InlineKeyboardMarkup, Message } from 'node-telegram-bot-api';
 import { Chats } from '../stores';
+import { wait } from './other';
 
 interface SendMessageOptions {
 	/**
@@ -7,6 +8,12 @@ interface SendMessageOptions {
 	 * @default true
 	 */
 	remove?: boolean,
+
+	/**
+	 * Remove Button text
+	 * @default "Bassd"
+	 */
+	removeButtonText?: string,
 
 	/**
 	 * Reply to Message
@@ -21,12 +28,18 @@ interface SendMessageOptions {
 	private?: boolean,
 }
 
-export async function sendMessage(bot: TelegramBot, msg: Message, text: string, comment: string = '', options: SendMessageOptions = {}) {
-	const settings = Chats.get(msg.chat.id.toString(), 'settings');
-
+export async function sendMessage(bot: TelegramBot, msg: Message, text: string, comment: string = '', options: SendMessageOptions = {}): Promise<Message> {
 	options.remove ??= true; // Remove per default
+	options.removeButtonText ??= "Bassd"; // Remove per default
 	options.reply ??= true; // Reply per default
 	options.private ??= false; // Don't write private message per default
+
+	// Use default options in private chat
+	const settings = !options.private ? Chats.get(msg.chat.id.toString(), 'settings') : {
+		sendLess:      false,
+		autoHide:      false,
+		autoHideDelay: 15,
+	};
 
 	if (comment && !settings.sendLess) {
 		text += `\n\n<code>${comment}</code>`;
@@ -38,7 +51,7 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 			inline_keyboard: [
 				[
 					{
-						text:          'Bassd',
+						text:          options.removeButtonText,
 						callback_data: `brezlbot_delete_msg`,
 					},
 				],
@@ -65,11 +78,9 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 	);
 
 	if (options.remove && settings.autoHide) {
-		setTimeout(
-			async () => {
-				await bot.deleteMessage(chatId, sentMsg.message_id.toString());
-			},
-			settings.autoHideDelay * 60 * 1000,
-		);
+		await wait(settings.autoHideDelay * 60 * 1000);
+		await bot.deleteMessage(chatId, sentMsg.message_id.toString());
 	}
+
+	return sentMsg;
 }

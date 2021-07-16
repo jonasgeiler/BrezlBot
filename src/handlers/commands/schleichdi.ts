@@ -3,7 +3,7 @@ import { Chats } from '../../stores';
 import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage } from '../../utils';
 
 export default (bot: TelegramBot) => {
-	bot.onText(commandRegex('schleichdi'), async (msg) => {
+	bot.onText(commandRegex('schleichdi'), async msg => {
 		if (!isGroupMessage(msg) || !isFromUser(msg) || isForwarded(msg)) return;
 
 		const member = await bot.getChatMember(msg.chat.id, msg.from!.id.toString());
@@ -13,6 +13,7 @@ export default (bot: TelegramBot) => {
 				bot, msg,
 				`<b>Tut ma leid, aba nua Administratorn könna desn Befehl vawendn :(</b>`,
 				`Dia vatraut oafach niemand &#x1F937;`,
+				{ removeButtonText: 'Schade' }
 			);
 
 			return;

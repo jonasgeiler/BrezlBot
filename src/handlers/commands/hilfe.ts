@@ -2,7 +2,7 @@ import type TelegramBot from 'node-telegram-bot-api';
 import { commandRegex, isForwarded, isFromUser, sendMessage } from '../../utils';
 
 export default (bot: TelegramBot) => {
-	bot.onText(commandRegex('hilfe'), async (msg) => {
+	bot.onText(commandRegex('hilfe'), async msg => {
 		if (!isFromUser(msg) || isForwarded(msg)) return;
 
 		await sendMessage(
@@ -11,7 +11,9 @@ export default (bot: TelegramBot) => {
 
 /topbrezler - Zeigt de Top-5 Brezler im aktuelln Chod an
 
-/meibrezln - Zeigt Ihrn Brezl-Kontostand an
+/meibrezln - Zeigt deinen Brezl-Kontostand an
+
+/schbuin - Starte a Glücksschbui, bei am ma Brezl gwinna oda valiarn konn
 
 /gusch - Schoidet den Gusch-Modus ein oda aus. Wenn ea eingschoidet is, san manche moana Nochrichdn kürza. (nua fia Administratorn vafügbar)
 
@@ -19,7 +21,7 @@ export default (bot: TelegramBot) => {
 
 /schleichdi_wartezeid <code>&lt;minudn&gt;</code> - Stäit a noch wia vuin Minudn de Nochrichdn vaschwindn, wenn da Schleich-di-Modus eingschoiden is. (nua fia Administratorn vafügbar)
 
-<i>Wenn Sie mi aus da Gruppn werfa, wern olle Brezl-Dadn fia den Chod gelöscht. Oan solchn Schoassdreck konn i oafach ned vazeihn!!!</i>`,
+<i>Wenn du mi aus da Gruppn wirfst, wern olle Brezl-Dadn fia den Chod gelöscht. Oan solchn Schoassdreck konn i oafach ned vazeihn!!!</i>`,
 			'',
 			{
 				remove: false, // Don't remove message

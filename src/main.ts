@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import config from './config';
 import * as handlers from './handlers';
 import * as jobs from './jobs';
+import './types';
 
 // Init telegram bot
 const bot = new TelegramBot(

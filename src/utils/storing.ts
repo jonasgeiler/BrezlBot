@@ -1,11 +1,12 @@
 import { User } from 'node-telegram-bot-api';
 import config from '../config';
 import { Chats } from '../stores';
+import { ChatMembers } from '../types';
 
 export function storeUser(chatId: number, user: User) {
 	if (user.is_bot) return;
 
-	const members = Chats.get(chatId.toString(), 'members');
+	const members: ChatMembers = Chats.get(chatId.toString(), 'members');
 
 	let name: string;
 
@@ -36,4 +37,20 @@ export function storeUser(chatId: number, user: User) {
 
 	// Update members
 	Chats.set(chatId.toString(), members, 'members');
+}
+
+export function getBrezls(chatId: number, userId: number): number {
+	let members: ChatMembers = Chats.get(chatId.toString(), 'members'); // Load members
+
+	return members[userId].brezls;
+}
+
+export function setBrezls(chatId: number, userId: number, newBrezls: number) {
+	let members: ChatMembers = Chats.get(chatId.toString(), 'members'); // Load members
+
+	if (newBrezls > 0 && newBrezls < Number.MAX_SAFE_INTEGER) {
+		members[userId].brezls = newBrezls; // Update brezls
+	}
+
+	Chats.set(chatId.toString(), members, 'members'); // Save members
 }

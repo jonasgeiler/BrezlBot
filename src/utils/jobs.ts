@@ -1,6 +1,6 @@
 import { isNumeric } from '../utils';
 
-export function scheduleJob(time: number | string, job: Function) {
+export function scheduleJob(time: number | string, job: Function): number {
 	let millis: number;
 
 	if (typeof time === 'number') {
@@ -24,5 +24,5 @@ export function scheduleJob(time: number | string, job: Function) {
 		}
 	}
 
-	setInterval(job, millis);
+	return setInterval(job, millis);
 }

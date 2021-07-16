@@ -1,15 +1,15 @@
 import type TelegramBot from 'node-telegram-bot-api';
 import { Chats } from '../../stores';
-import { ChatMember } from '../../types';
+import { ChatMember, ChatMembers } from '../../types';
 import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
 
 export default (bot: TelegramBot) => {
-	bot.onText(commandRegex('topbrezler'), async (msg) => {
+	bot.onText(commandRegex('topbrezler'), async msg => {
 		if (!isGroupMessage(msg) || !isFromUser(msg) || isForwarded(msg)) return;
 
 		storeUser(msg.chat.id, msg.from!);
 
-		const members = Chats.get(msg.chat.id.toString(), 'members');
+		const members: ChatMembers = Chats.get(msg.chat.id.toString(), 'members');
 
 		let topBrezler: ChatMember[] = Object.values(members);
 
@@ -18,7 +18,7 @@ export default (bot: TelegramBot) => {
 				bot, msg,
 				`<b>Oida, in dea Gruppn gibt 's koa Brezl-Liabhobr! &#x1F47A;&#x1F47A;&#x1F47A;</b>
 
-<code>Machn Sie schnei und antwoadn Sie auf de Nochricht vo jemandem mid &#x1F968;!!!!</code>`,
+<code>Machts schnei und ontwortet auf de Nochricht vo jemandem mid &#x1F968;!!!!</code>`,
 			);
 
 			return;

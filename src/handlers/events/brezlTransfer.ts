@@ -5,9 +5,9 @@ import { ChatMember } from '../../types';
 import { isForwarded, isFromUser, isGroupMessage, isNumeric, removeAtSign, sendMessage, storeUser } from '../../utils';
 
 export default (bot: TelegramBot) => {
-	const bretzlRegex = /(\u{1F968})/gu;
+	const brezlRegex = /(\u{1F968})/gu;
 
-	bot.onText(bretzlRegex, async (msg) => {
+	bot.onText(brezlRegex, async msg => {
 		if (!isGroupMessage(msg) || !isFromUser(msg) || isForwarded(msg) || !msg.text) return;
 
 		const matches = msg.text.replace(
@@ -18,7 +18,7 @@ export default (bot: TelegramBot) => {
 
 				return brezlEmoji.repeat(parseInt(multiplier));
 			},
-		).match(bretzlRegex);
+		).match(brezlRegex);
 
 		if (!matches || matches.length === 0) return;
 
@@ -46,7 +46,8 @@ export default (bot: TelegramBot) => {
 				await sendMessage(
 					bot, msg,
 					`<b>Tut ma leid, aba 's konn nua oan Brezl-Empfänga gebn.</b>`,
-					`Warum teiln Sie des ned in zwoa separate Brezl-Dransaktiona auf? &#x1F914;`,
+					`Warum teilst du des ned in zwoa separate Brezl-Dransaktiona auf? &#x1F914;`,
+					{ removeButtonText: 'Gäd klar' },
 				);
 
 				return;
@@ -70,8 +71,9 @@ export default (bot: TelegramBot) => {
 				if (!receiverId) {
 					await sendMessage(
 						bot, msg,
-						`<b>Nehma Sie mi übahabt eanst?! De Person is koa Mitgliad dess Chats oda hod no nix gschriebn.</b>`,
+						`<b>De Person is koa Mitgliad dess Chats oda hod no nix gschriebn.</b>`,
 						`Wenn 's si übahabt um a reale Person handelt... &#x1F914;`,
+						{ removeButtonText: 'A Vasuch wars wert' },
 					);
 
 					return;
@@ -90,12 +92,14 @@ export default (bot: TelegramBot) => {
 					bot, msg,
 					`<b>Tut ma leid, i konn leida koa Brezln empfangn :(</b>`,
 					`Aba i gfrei mi dass du mi so wertschätzt &#x1F60A;&#x1F60A;&#x1F60A;`,
+					{ removeButtonText: 'A Vasuch wars wert' },
 				);
 			} else {
 				await sendMessage(
 					bot, msg,
 					`<b>Tut ma leid, aba Computa könna koa Brezln empfangn :(</b>`,
 					`I glab ned oamoi, dass sie Menschennahrung essn könna &#x1F914;&#x1F914;&#x1F914;`,
+					{ removeButtonText: 'A Vasuch wars wert' },
 				);
 			}
 
@@ -105,8 +109,9 @@ export default (bot: TelegramBot) => {
 		if (senderId === receiverId) {
 			await sendMessage(
 				bot, msg,
-				`<b>Warum woin Sie de köstlichn Brezln an si seibsd schickn...???</b>`,
-				`Sie san a wirklich komischa Mensch &#x1F610;`,
+				`<b>Warum wuist du de köstlichn Brezln an di seibsd schickn...???</b>`,
+				`Du bisd a wirklich komischa Mensch &#x1F610;`,
+				{ removeButtonText: 'A Vasuch wars wert' },
 			);
 
 			return;
@@ -120,11 +125,25 @@ export default (bot: TelegramBot) => {
 		const senderData: ChatMember = chat.members[senderId];
 		const receiverData: ChatMember = chat.members[receiverId];
 
+		if (!receiverData) return; // Happens when a message the user replied to is too old
+
 		if (transferAmount > senderData.brezls) {
 			await sendMessage(
 				bot, msg,
-				`<b>Na Hoppala... Sie hom ned genug Brezln!</b>`,
-				`Sie kanntn vuileicht a Crowdfunding-Seitn stardn, um a boh Brezln vo Ihrn Freindn und andern Teilnehmern zua griagn. &#x1F643;`,
+				`<b>Na Hoppala... Du hosd ned genug Brezln!</b>`,
+				`Du kanntst vuileicht a Crowdfunding-Seitn stardn, um a boh Brezln vo deine Freindn und andern Teilnehmern zua griagn. &#x1F643;`,
+				{ removeButtonText: 'Ze fix' },
+			);
+
+			return;
+		}
+
+		if (receiverData.brezls + transferAmount > Number.MAX_SAFE_INTEGER) {
+			await sendMessage(
+				bot, msg,
+				`<b>Bisd du deppod! ${receiverData.name} hod scho vui zua vui Brezln und konn ned mehr empfangn!</b>`,
+				`I glab aa ned dass de no mehr Brezln brauchn! &#x1F605;`,
+				{ removeButtonText: 'Wow!' },
 			);
 
 			return;
@@ -142,15 +161,16 @@ export default (bot: TelegramBot) => {
 
 		let comment = 'Dea muas a guada Mensch sei! &#x1F63D;';
 		if (transferAmount < 25) {
-			comment = 'Warum hom Sie ned mehr Brezln vagem? &#x1F634;';
+			comment = 'Warum hosd du ned mehr Brezln vagem? &#x1F634;';
 		} else if (transferAmount > 60) {
-			comment = 'Schuidn Sie eahm vui Gejd oda wos? &#x1F639;';
+			comment = 'Schuidest du eahm vui Gejd oda wos? &#x1F639;';
 		}
 
 		await sendMessage(
 			bot, msg,
 			`${senderData.name} <b>gob</b> <code>${transferAmount}</code> <b>${transferAmount === 1 ? 'Brezl' : 'Brezln'} an</b> ${receiverData.name}!`,
 			comment,
+			{ removeButtonText: 'Gern gschehn' },
 		);
 	});
 }

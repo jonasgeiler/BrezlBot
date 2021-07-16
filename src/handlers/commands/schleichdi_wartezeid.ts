@@ -13,6 +13,7 @@ export default (bot: TelegramBot) => {
 				bot, msg,
 				`<b>Tut ma leid, aba nua Administratorn könna desn Befehl vawendn :(</b>`,
 				`Dia vatraut oafach niemand &#x1F937;`,
+				{ removeButtonText: 'Schade' }
 			);
 
 			return;
@@ -24,8 +25,9 @@ export default (bot: TelegramBot) => {
 			await sendMessage(
 				bot, msg,
 				`<b>I konn nua Werte zwischn 1 und 1440 Minudn ois Wartezeid fia den Schleich-di-Modus akzeptiern.</b>
-Bitte koarigiern Sie Ihre Ofroge und vasuchn Sie 's eaneit.`,
+Bitte korrigiere dei Ofroge und vasuche 's eaneit.`,
 				`So lang konn i oafach ned wardn! &#x1F634;`,
+				{ removeButtonText: 'I probias nochmoi' }
 			);
 
 			return;

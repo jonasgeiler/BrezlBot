@@ -3,7 +3,7 @@ import { Chats } from '../../stores';
 import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage } from '../../utils';
 
 export default (bot: TelegramBot) => {
-	bot.onText(commandRegex('gusch'), async (msg) => {
+	bot.onText(commandRegex('gusch'), async msg => {
 		if (!isGroupMessage(msg) || !isFromUser(msg) || isForwarded(msg)) return;
 
 		const member = await bot.getChatMember(msg.chat.id, msg.from!.id.toString());
@@ -13,6 +13,7 @@ export default (bot: TelegramBot) => {
 				bot, msg,
 				`<b>Tut ma leid, aba nua Administratorn könna desn Befehl vawendn :(</b>`,
 				`Dia vatraut oafach niemand &#x1F937;`,
+				{ removeButtonText: 'Schade' }
 			);
 
 			return;
@@ -26,11 +27,13 @@ export default (bot: TelegramBot) => {
 
 		const newState = sendLess ? 'eingeschoidet' : 'ausgeschoidet';
 		const comment = sendLess ? 'I werd mi bissal zuarugghoidn...' : 'Machts eich auf blede Kommentare gfossd!';
+		const removeButtonText = sendLess ? 'I hob Gusch gsogt!' : 'Bassd';
 
 		await sendMessage(
 			bot, msg,
 			`<b>Da Gusch-Modus wurde ${newState}.</b>`,
 			comment,
+			{ removeButtonText }
 		);
 	});
 }

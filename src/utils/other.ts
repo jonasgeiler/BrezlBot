@@ -1,4 +1,4 @@
-export function removeAtSign(str: string) {
+export function removeAtSign(str: string): string {
 	if (str.startsWith('@')) {
 		str = str.substr(1);
 	}
@@ -6,4 +6,8 @@ export function removeAtSign(str: string) {
 	return str;
 }
 
-export const isNumeric = (value: any) => !isNaN(value);
+export function wait(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export const isNumeric = (value: any): boolean => !isNaN(value);
