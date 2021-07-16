@@ -1,6 +1,5 @@
 import type TelegramBot from 'node-telegram-bot-api';
-import { Chats } from '../../stores';
-import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage } from '../../utils';
+import { commandRegex, getSettings, isForwarded, isFromUser, isGroupMessage, sendMessage, setSettings } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('schleichdi'), async msg => {
@@ -13,20 +12,20 @@ export default (bot: TelegramBot) => {
 				bot, msg,
 				`<b>Tut ma leid, aba nua Administratorn könna desn Befehl vawendn :(</b>`,
 				`Dia vatraut oafach niemand &#x1F937;`,
-				{ removeButtonText: 'Schade' }
+				{ removeButtonText: 'Schade' },
 			);
 
 			return;
 		}
 
-		let autoHide: boolean = Chats.get(msg.chat.id.toString(), 'settings.autoHide'); // Load setting
+		let settings = getSettings(msg.chat.id);
 
-		autoHide = !autoHide; // Toggle setting
+		settings.autoHide = !settings.autoHide;
 
-		Chats.set(msg.chat.id.toString(), autoHide, 'settings.autoHide'); // Save setting
+		setSettings(msg.chat.id, settings);
 
-		const newState = autoHide ? 'eingeschoidet' : 'ausgeschoidet';
-		const comment = autoHide ? 'Meine Nochrichdn bleim ned lang!' : 'Sog hoid wenn i meine Nochrichdn wegdoa soi...';
+		const newState = settings.autoHide ? 'eingeschoidet' : 'ausgeschoidet';
+		const comment = settings.autoHide ? 'Meine Nochrichdn bleim ned lang!' : 'Sog hoid wenn i meine Nochrichdn wegdoa soi...';
 
 		await sendMessage(
 			bot, msg,

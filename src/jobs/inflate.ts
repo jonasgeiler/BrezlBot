@@ -1,7 +1,7 @@
 import { scheduleJob } from '../utils';
 
 export default () => {
-	scheduleJob('1h', () => {
+	scheduleJob('24h', () => {
 		console.log('Inflate!');
 	});
 };

@@ -1,8 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import config from '../../config';
-import { Chats } from '../../stores';
-import { ChatMember } from '../../types';
-import { isForwarded, isFromUser, isGroupMessage, isNumeric, removeAtSign, sendMessage, storeUser } from '../../utils';
+import { getBotId, getChat, isForwarded, isFromUser, isGroupMessage, isNumeric, removeAtSign, sendMessage, setMembers, storeUser } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	const brezlRegex = /(\u{1F968})/gu;
@@ -22,8 +20,8 @@ export default (bot: TelegramBot) => {
 
 		if (!matches || matches.length === 0) return;
 
-		const chat = Chats.get(msg.chat.id.toString());
-		const members: ChatMember[] = Object.values(chat.members);
+		const chat = getChat(msg.chat.id);
+		const members = Object.values(chat.members);
 
 		const transferAmount = matches.length;
 		const senderId = msg.from!.id;
@@ -57,9 +55,7 @@ export default (bot: TelegramBot) => {
 
 			if (config.bot.username.toLowerCase() === removeAtSign(mentionedUser).toLowerCase()) {
 				// They mentioned the bot itself, so just grab the bots user ID and let the code below handle it.
-				const me = await bot.getMe();
-
-				receiverId = me.id;
+				receiverId = await getBotId(bot);
 			} else {
 				for (let member of members) {
 					if (member.name.toLowerCase() === mentionedUser.toLowerCase()) {
@@ -122,8 +118,8 @@ export default (bot: TelegramBot) => {
 		storeUser(msg.chat.id, sender.user);
 		storeUser(msg.chat.id, receiver.user);
 
-		const senderData: ChatMember = chat.members[senderId];
-		const receiverData: ChatMember = chat.members[receiverId];
+		const senderData = chat.members[senderId];
+		const receiverData = chat.members[receiverId];
 
 		if (!receiverData) return; // Happens when a message the user replied to is too old
 
@@ -157,7 +153,7 @@ export default (bot: TelegramBot) => {
 		chat.members[senderId] = senderData;
 		chat.members[receiverId] = receiverData;
 
-		Chats.set(msg.chat.id.toString(), chat.members, 'members');
+		setMembers(msg.chat.id, chat.members);
 
 		let comment = 'Dea muas a guada Mensch sei! &#x1F63D;';
 		if (transferAmount < 25) {
@@ -172,7 +168,7 @@ export default (bot: TelegramBot) => {
 			comment,
 			{
 				removeButtonText: 'Dankeschee',
-				removeAllowedId: receiverId
+				removeAllowedId:  receiverId,
 			},
 		);
 	});

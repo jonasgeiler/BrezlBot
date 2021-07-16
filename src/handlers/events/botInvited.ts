@@ -1,16 +1,17 @@
 import TelegramBot from 'node-telegram-bot-api';
 import config from '../../config';
-import { isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
+import { getBotId, isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.on('new_chat_members', async msg => {
 		if (!isGroupMessage(msg)) return;
 
-		const me = await bot.getMe();
+		const botId = await getBotId(bot);
 
 		for (let member of msg.new_chat_members!) {
-			if (member.id === me.id) {
+			if (member.id === botId) {
 				// I got invited to a chat!
+
 				if (isFromUser(msg)) storeUser(msg.chat.id, msg.from!);
 
 				await sendMessage(

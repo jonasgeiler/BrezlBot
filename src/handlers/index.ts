@@ -6,6 +6,7 @@ export { default as schleichdi_wartezeid } from './commands/schleichdi_wartezeid
 export { default as topbrezler } from './commands/topbrezler';
 export { default as meibrezln } from './commands/meibrezln';
 export { default as schbuin } from './commands/schbuin';
+export { default as brezlfladern } from './commands/brezlfladern';
 
 export { default as storeUsers } from './events/storeUsers';
 export { default as botInvited } from './events/botInvited';

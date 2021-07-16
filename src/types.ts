@@ -2,6 +2,7 @@ export interface ChatMember {
 	id: number,
 	name: string,
 	brezls: number,
+	lastRobbery: number,
 }
 
 export interface ChatMembers {
@@ -12,6 +13,11 @@ export interface ChatSettings {
 	sendLess: boolean,
 	autoHide: boolean,
 	autoHideDelay: number,
+}
+
+export interface Chat {
+	settings: ChatSettings,
+	members: ChatMembers
 }
 
 // Module overwrites

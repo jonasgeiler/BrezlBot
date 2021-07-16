@@ -1,16 +1,16 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { Chats } from '../../stores';
-import { isFromUser, isGroupMessage, sendMessage } from '../../utils';
+import { chatExists, deleteChat, getBotId, isFromUser, isGroupMessage, sendMessage } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.on('left_chat_member', async msg => {
 		if (!isGroupMessage(msg)) return;
 
-		const me = await bot.getMe();
+		const botId = await getBotId(bot);
 
-		if (msg.left_chat_member?.id === me.id && Chats.has(msg.chat.id.toString())) {
+		if (msg.left_chat_member?.id === botId && chatExists(msg.chat.id)) {
 			// I GOT KICKED AAHHHHH
-			Chats.delete(msg.chat.id.toString()); // Delete data
+
+			deleteChat(msg.chat.id);
 
 			if (isFromUser(msg)) {
 				await sendMessage(

@@ -1,6 +1,5 @@
 import type TelegramBot from 'node-telegram-bot-api';
-import { Chats } from '../../stores';
-import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage } from '../../utils';
+import { commandRegex, getSettings, isForwarded, isFromUser, isGroupMessage, sendMessage, setSettings } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('schleichdi_wartezeid', ['number']), async (msg, match) => {
@@ -13,7 +12,7 @@ export default (bot: TelegramBot) => {
 				bot, msg,
 				`<b>Tut ma leid, aba nua Administratorn könna desn Befehl vawendn :(</b>`,
 				`Dia vatraut oafach niemand &#x1F937;`,
-				{ removeButtonText: 'Schade' }
+				{ removeButtonText: 'Schade' },
 			);
 
 			return;
@@ -27,13 +26,17 @@ export default (bot: TelegramBot) => {
 				`<b>I konn nua Werte zwischn 1 und 1440 Minudn ois Wartezeid fia den Schleich-di-Modus akzeptiern.</b>
 Bitte korrigiere dei Ofroge und vasuche 's eaneit.`,
 				`So lang konn i oafach ned wardn! &#x1F634;`,
-				{ removeButtonText: 'I probias nochmoi' }
+				{ removeButtonText: 'I probias nochmoi' },
 			);
 
 			return;
 		}
 
-		Chats.set(msg.chat.id.toString(), delay, 'settings.autoHideDelay'); // Save setting
+		let settings = getSettings(msg.chat.id);
+
+		settings.autoHideDelay = delay;
+
+		setSettings(msg.chat.id, settings);
 
 		await sendMessage(
 			bot, msg,

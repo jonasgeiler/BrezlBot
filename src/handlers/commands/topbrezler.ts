@@ -1,7 +1,5 @@
 import type TelegramBot from 'node-telegram-bot-api';
-import { Chats } from '../../stores';
-import { ChatMember, ChatMembers } from '../../types';
-import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
+import { commandRegex, getMembers, isForwarded, isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('topbrezler'), async msg => {
@@ -9,9 +7,8 @@ export default (bot: TelegramBot) => {
 
 		storeUser(msg.chat.id, msg.from!);
 
-		const members: ChatMembers = Chats.get(msg.chat.id.toString(), 'members');
-
-		let topBrezler: ChatMember[] = Object.values(members);
+		const members = getMembers(msg.chat.id);
+		let topBrezler = Object.values(members);
 
 		if (topBrezler.length === 0) {
 			await sendMessage(
@@ -20,7 +17,7 @@ export default (bot: TelegramBot) => {
 
 <code>Machts schnei und ontwortet auf de Nochricht vo jemandem mid &#x1F968;!!!!</code>`,
 				'',
-				{ removeAllowedId: false }
+				{ removeAllowedId: false },
 			);
 
 			return;
@@ -49,7 +46,7 @@ export default (bot: TelegramBot) => {
 			bot, msg,
 			message,
 			`Ned aufgem! &#x1F4AA;`,
-			{ removeAllowedId: false }
+			{ removeAllowedId: false },
 		);
 	});
 }

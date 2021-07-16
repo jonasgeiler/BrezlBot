@@ -1,7 +1,7 @@
 import { User } from 'node-telegram-bot-api';
 import config from '../config';
 import { Chats } from '../stores';
-import { ChatMembers } from '../types';
+import { Chat, ChatMembers, ChatSettings } from '../types';
 
 export function storeUser(chatId: number, user: User) {
 	if (user.is_bot) return;
@@ -23,8 +23,9 @@ export function storeUser(chatId: number, user: User) {
 	if (!members[user.id]) {
 		// Add member
 		members[user.id] = {
-			id:     user.id,
-			brezls: config.defaultBrezls,
+			id:          user.id,
+			brezls:      config.defaultBrezls,
+			lastRobbery: 0,
 			name,
 		};
 	} else if (members[user.id].name !== name) {
@@ -39,18 +40,39 @@ export function storeUser(chatId: number, user: User) {
 	Chats.set(chatId.toString(), members, 'members');
 }
 
-export function getBrezls(chatId: number, userId: number): number {
-	let members: ChatMembers = Chats.get(chatId.toString(), 'members'); // Load members
 
-	return members[userId].brezls;
+export const getChat = (chatId: number): Chat => Chats.get(chatId.toString());
+export const deleteChat = (chatId: number): void => Chats.delete(chatId.toString());
+export const chatExists = (chatId: number): boolean => Chats.has(chatId.toString());
+
+
+export const getMembers = (chatId: number): ChatMembers => Chats.get(chatId.toString(), 'members');
+export const setMembers = (chatId: number, members: ChatMembers): void => Chats.set(chatId.toString(), members, 'members');
+
+
+export const getSettings = (chatId: number): ChatSettings => Chats.get(chatId.toString(), 'settings');
+export const setSettings = (chatId: number, settings: ChatSettings): void => Chats.set(chatId.toString(), settings, 'settings');
+
+
+export const getBrezls = (chatId: number, userId: number): number => getMembers(chatId)[userId]?.brezls;
+
+export function setBrezls(chatId: number, userId: number, brezls: number): void {
+	if (brezls > 0 && brezls < Number.MAX_SAFE_INTEGER) {
+		const members = getMembers(chatId);
+
+		members[userId].brezls = brezls;
+
+		setMembers(chatId, members);
+	}
 }
 
-export function setBrezls(chatId: number, userId: number, newBrezls: number) {
-	let members: ChatMembers = Chats.get(chatId.toString(), 'members'); // Load members
 
-	if (newBrezls > 0 && newBrezls < Number.MAX_SAFE_INTEGER) {
-		members[userId].brezls = newBrezls; // Update brezls
-	}
+export const getLastRobbery = (chatId: number, userId: number): number => getMembers(chatId)[userId]?.lastRobbery;
 
-	Chats.set(chatId.toString(), members, 'members'); // Save members
+export function setLastRobbery(chatId: number, userId: number, lastRobbery: number) {
+	const members = getMembers(chatId);
+
+	members[userId].lastRobbery = lastRobbery;
+
+	setMembers(chatId, members);
 }

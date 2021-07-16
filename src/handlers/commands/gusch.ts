@@ -1,6 +1,5 @@
 import type TelegramBot from 'node-telegram-bot-api';
-import { Chats } from '../../stores';
-import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage } from '../../utils';
+import { commandRegex, getSettings, isForwarded, isFromUser, isGroupMessage, sendMessage, setSettings } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('gusch'), async msg => {
@@ -13,27 +12,27 @@ export default (bot: TelegramBot) => {
 				bot, msg,
 				`<b>Tut ma leid, aba nua Administratorn könna desn Befehl vawendn :(</b>`,
 				`Dia vatraut oafach niemand &#x1F937;`,
-				{ removeButtonText: 'Schade' }
+				{ removeButtonText: 'Schade' },
 			);
 
 			return;
 		}
 
-		let sendLess: boolean = Chats.get(msg.chat.id.toString(), 'settings.sendLess'); // Load setting
+		let settings = getSettings(msg.chat.id);
 
-		sendLess = !sendLess; // Toggle setting
+		settings.sendLess = !settings.sendLess;
 
-		Chats.set(msg.chat.id.toString(), sendLess, 'settings.sendLess'); // Save setting
+		setSettings(msg.chat.id, settings);
 
-		const newState = sendLess ? 'eingeschoidet' : 'ausgeschoidet';
-		const comment = sendLess ? 'I werd mi bissal zuarugghoidn...' : 'Machts eich auf blede Kommentare gfossd!';
-		const removeButtonText = sendLess ? 'I hob Gusch gsogt!' : 'Bassd';
+		const newState = settings.sendLess ? 'eingeschoidet' : 'ausgeschoidet';
+		const comment = settings.sendLess ? 'I werd mi bissal zuarugghoidn...' : 'Machts eich auf blede Kommentare gfossd!';
+		const removeButtonText = settings.sendLess ? 'I hob Gusch gsogt!' : 'Bassd';
 
 		await sendMessage(
 			bot, msg,
 			`<b>Da Gusch-Modus wurde ${newState}.</b>`,
 			comment,
-			{ removeButtonText }
+			{ removeButtonText },
 		);
 	});
 }
