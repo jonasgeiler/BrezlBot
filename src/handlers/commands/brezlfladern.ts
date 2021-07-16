@@ -1,9 +1,11 @@
 import type TelegramBot from 'node-telegram-bot-api';
-import { commandRegex, getBrezls, getLastRobbery, getRandomInt, isForwarded, isFromUser, isGroupMessage, sendMessage, setBrezls, setLastRobbery } from '../../utils';
+import { commandRegex, getBrezls, getLastRobbery, getRandomInt, isForwarded, isFromUser, isGroupMessage, sendMessage, setBrezls, setLastRobbery, storeUser } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('brezlfladern'), async msg => {
 		if (!isGroupMessage(msg) || !isFromUser(msg) || isForwarded(msg)) return;
+
+		storeUser(msg.chat.id, msg.from!);
 
 		// Check if last robbery was less than a week ago
 		if (Date.now() - getLastRobbery(msg.chat.id, msg.from!.id) <= 24 * 60 * 60 * 1000) {
