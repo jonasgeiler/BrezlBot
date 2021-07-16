@@ -13,9 +13,12 @@ export default (bot: TelegramBot) => {
 
 <b>Kost</b> <code>3</code> <b>Brezl!</b>
 Ma konn bis zua <code>2</code> Brezl <b>valiarn</b> und bis zua <code>3</code> <b>gwinna</b>!
-<b>Jeder</b> kann mitmachen!`,
+<b>Jeda</b> konn mitmachn!`,
 			`I drugg eich de Dauma &#x270A;`,
-			{ removeButtonText: 'Beendn' },
+			{
+				removeButtonText: 'Beendn',
+				removeAllowedId:  false,
+			},
 		);
 
 		bot.onReplyToMessage(msg.chat.id, sentMsg.message_id, async msg => {
@@ -28,7 +31,7 @@ Ma konn bis zua <code>2</code> Brezl <b>valiarn</b> und bis zua <code>3</code> <
 					bot, msg,
 					`<b>Na Hoppala... Du hosd ned genug Brezln!</b>`,
 					`Hosd du vuileicht scho zua vui gschbuit? &#x1F914;`,
-					{ removeButtonText: 'Ze fix' },
+					{ removeButtonText: 'Ze fix no oamoi' },
 				);
 
 				return;
@@ -52,7 +55,7 @@ Ma konn bis zua <code>2</code> Brezl <b>valiarn</b> und bis zua <code>3</code> <
 			// Wait 5 seconds until animation stopped
 			await wait(5000);
 
-			brezls = getBrezls(msg.chat.id, msg.from!.id)
+			brezls = getBrezls(msg.chat.id, msg.from!.id);
 			const newBrezls = brezls + wonAmount;
 
 			if (brezls < 3 || newBrezls < 0) {

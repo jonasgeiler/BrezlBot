@@ -16,6 +16,13 @@ interface SendMessageOptions {
 	removeButtonText?: string,
 
 	/**
+	 * User ID who can remove the message
+	 * False to disable
+	 * @default msg.from.id
+	 */
+	removeAllowedId?: number | boolean
+
+	/**
 	 * Reply to Message
 	 * @default true
 	 */
@@ -30,7 +37,8 @@ interface SendMessageOptions {
 
 export async function sendMessage(bot: TelegramBot, msg: Message, text: string, comment: string = '', options: SendMessageOptions = {}): Promise<Message> {
 	options.remove ??= true; // Remove per default
-	options.removeButtonText ??= "Bassd"; // Remove per default
+	options.removeButtonText ??= 'Bassd'; // Remove per default
+	options.removeAllowedId ??= msg.from!.id; // Can be removed by user who sent the request by default
 	options.reply ??= true; // Reply per default
 	options.private ??= false; // Don't write private message per default
 
@@ -47,12 +55,14 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 
 	let reply_markup: InlineKeyboardMarkup | undefined;
 	if (options.remove && !settings.autoHide) {
+		const callback_data = 'brezlbot_confirm_msg' + (options.removeAllowedId ? `:${options.removeAllowedId}` : '');
+
 		reply_markup = {
 			inline_keyboard: [
 				[
 					{
-						text:          options.removeButtonText,
-						callback_data: `brezlbot_delete_msg`,
+						text: options.removeButtonText,
+						callback_data,
 					},
 				],
 			],

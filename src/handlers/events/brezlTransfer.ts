@@ -170,7 +170,10 @@ export default (bot: TelegramBot) => {
 			bot, msg,
 			`${senderData.name} <b>gob</b> <code>${transferAmount}</code> <b>${transferAmount === 1 ? 'Brezl' : 'Brezln'} an</b> ${receiverData.name}!`,
 			comment,
-			{ removeButtonText: 'Gern gschehn' },
+			{
+				removeButtonText: 'Dankeschee',
+				removeAllowedId: receiverId
+			},
 		);
 	});
 }

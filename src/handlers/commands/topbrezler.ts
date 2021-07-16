@@ -19,6 +19,8 @@ export default (bot: TelegramBot) => {
 				`<b>Oida, in dea Gruppn gibt 's koa Brezl-Liabhobr! &#x1F47A;&#x1F47A;&#x1F47A;</b>
 
 <code>Machts schnei und ontwortet auf de Nochricht vo jemandem mid &#x1F968;!!!!</code>`,
+				'',
+				{ removeAllowedId: false }
 			);
 
 			return;
@@ -47,6 +49,7 @@ export default (bot: TelegramBot) => {
 			bot, msg,
 			message,
 			`Ned aufgem! &#x1F4AA;`,
+			{ removeAllowedId: false }
 		);
 	});
 }
