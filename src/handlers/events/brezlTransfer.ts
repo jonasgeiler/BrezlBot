@@ -109,7 +109,7 @@ export default (bot: TelegramBot) => {
 		if (senderId === receiverId) {
 			await sendMessage(
 				bot, msg,
-				`<b>Warum wuist du de köstlichn Brezln an di seibsd schickn...???</b>`,
+				`<b>Warum wuist du de köstlichn Brezln an di seibsd vagem...???</b>`,
 				`Du bisd a wirklich komischa Mensch &#x1F610;`,
 				{ removeButtonText: 'A Vasuch wars wert' },
 			);
