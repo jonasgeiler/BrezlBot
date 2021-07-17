@@ -1,1 +1,1 @@
-export { default as inflate } from './inflate';
+export { default as inflate } from "./inflate";

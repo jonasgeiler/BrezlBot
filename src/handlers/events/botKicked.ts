@@ -1,9 +1,18 @@
-import TelegramBot from 'node-telegram-bot-api';
-import { chatExists, deleteChat, getBotId, isFromUser, isGroupMessage, sendMessage } from '../../utils';
+import TelegramBot from "node-telegram-bot-api";
+import {
+	chatExists,
+	deleteChat,
+	getBotId,
+	isFromUser,
+	isGroupMessage,
+	sendMessage,
+} from "../../utils";
 
-export default (bot: TelegramBot) => {
-	bot.on('left_chat_member', async msg => {
-		if (!isGroupMessage(msg)) return;
+export default (bot: TelegramBot): void => {
+	bot.on("left_chat_member", async (msg) => {
+		if (!isGroupMessage(msg)) {
+			return;
+		}
 
 		const botId = await getBotId(bot);
 
@@ -14,18 +23,19 @@ export default (bot: TelegramBot) => {
 
 			if (isFromUser(msg)) {
 				await sendMessage(
-					bot, msg,
+					bot,
+					msg,
 					`<b>I wurde aus "${msg.chat.title}" aussegewoafa, oiso wurdn de Dadn üba de Brezln da Benutza gelöscht!</b>
 
 Vuin Dank fia de Einladung in deim Chat - Du kannst mi gern schbada wieda hizufügn.`,
 					`I hoff i hob nix foisches gmacht! &#x1F97A;`,
 					{
 						private: true, // Respond to message in private chat
-						remove:  false, // Don't remove message
-						reply:   false, // Can't reply
+						remove: false, // Don't remove message
+						reply: false, // Can't reply
 					},
 				);
 			}
 		}
 	});
-}
+};

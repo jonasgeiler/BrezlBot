@@ -1,4 +1,4 @@
-import { config as dotenvConfig } from 'dotenv';
+import { config as dotenvConfig } from "dotenv";
 
 // Load .env file
 dotenvConfig();
@@ -7,80 +7,109 @@ interface BotConfig {
 	/**
 	 * Bot Token obtained from @BotFather
 	 */
-	token: string,
+	token: string;
 
 	/**
 	 * Bot Username
 	 */
-	username: string,
+	username: string;
 
 	/**
 	 * Interval between requests in milliseconds
 	 */
-	interval: number,
+	interval: number;
 
 	/**
 	 * Payment Provider Token obtained from @BotFather
 	 */
-	paymentProviderToken: string,
+	paymentProviderToken: string;
 }
 
 interface Config {
 	/**
 	 * Bot config
 	 */
-	bot: BotConfig
+	bot: BotConfig;
 
 	/**
 	 * Timezone for scheduled jobs
 	 */
-	timezone: string,
+	timezone: string;
 
 	/**
 	 * Default brezl amount for every user
 	 */
-	defaultBrezls: number,
+	defaultBrezls: number;
 
 	/**
 	 * Price for buying brezls in Cents (yes, real money!)
 	 */
-	brezlPrice: number,
+	brezlPrice: number;
 }
 
 /**
  * Default config
  */
-let config: Config = {
-	bot:           {
-		token:                '',
-		username:             '',
-		interval:             300,
-		paymentProviderToken: '',
+const config: Config = {
+	bot: {
+		token: "",
+		username: "",
+		interval: 300,
+		paymentProviderToken: "",
 	},
-	timezone:      'Europe/London',
+	timezone: "Europe/London",
 	defaultBrezls: 25,
-	brezlPrice:    85,
+	brezlPrice: 85,
 };
 
-// Set each environment variable:
-if (process.env.BOT_TOKEN) {
-	config.bot.token = process.env.BOT_TOKEN;
-} else {
-	console.error('BOT_TOKEN not defined in .env file');
-	process.exit(5);
-}
-if (process.env.BOT_USERNAME) {
-	config.bot.username = process.env.BOT_USERNAME;
-} else {
-	console.error('BOT_USERNAME not defined in .env file');
-	process.exit(5);
-}
-if (process.env.BOT_INTERVAL) config.bot.interval = parseInt(process.env.BOT_INTERVAL);
-if (process.env.BOT_PAYMENT_PROVIDER_TOKEN) config.bot.paymentProviderToken = process.env.BOT_PAYMENT_PROVIDER_TOKEN;
+type EnvData = { key: string; type: "string" | "number" };
+function ensureEnv<Target>(
+	target: Record<keyof Target, unknown>,
+	template: Partial<Record<keyof Target, string | EnvData>>,
+) {
+	Object.entries(template).forEach(([configKey, envData]) => {
+		let transformFn = null;
+		let envValue = "";
+		if (typeof envData === "string") {
+			envValue = process.env[envData as string] as string;
+		} else {
+			const { key, type } = envData as EnvData;
+			envValue = process.env[key] as string;
+			if (type === "number") {
+				transformFn = (v: string) => parseInt(v, 10);
+			}
+		}
 
-if (process.env.TIMEZONE) config.timezone = process.env.TIMEZONE;
-if (process.env.DEFAULT_BREZLS) config.defaultBrezls = parseInt(process.env.DEFAULT_BREZLS);
-if (process.env.BREZL_PRICE) config.brezlPrice = parseInt(process.env.BREZL_PRICE);
+		if (!envValue) {
+			console.error(`Missing environment variable "${configKey}"`);
+			process.exit(5);
+		}
+
+		target[configKey] = transformFn ? transformFn(envValue) : envValue;
+	});
+}
+
+ensureEnv<BotConfig>(config.bot, {
+	token: "BOT_TOKEN",
+	username: "BOT_USERNAME",
+	paymentProviderToken: "BOT_PAYMENT_PROVIDER_TOKEN",
+	interval: {
+		key: "BOT_INTERVAL",
+		type: "number",
+	},
+});
+
+ensureEnv<Config>(config, {
+	defaultBrezls: {
+		key: "DEFAULT_BREZLS",
+		type: "number",
+	},
+	brezlPrice: {
+		key: "BREZL_PRICE",
+		type: "number",
+	},
+	timezone: "TIMEZONE",
+});
 
 // Export
 export default config;

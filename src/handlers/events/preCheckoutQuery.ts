@@ -1,13 +1,18 @@
-import type TelegramBot from 'node-telegram-bot-api';
-import config from '../../config';
+import type TelegramBot from "node-telegram-bot-api";
+import config from "../../config";
 
-export default (bot: TelegramBot) => {
-	bot.on('pre_checkout_query', async preCheckoutQuery => {
-		if (!preCheckoutQuery.invoice_payload.startsWith('brezlbot_buy_brezl')) return;
+export default (bot: TelegramBot): void => {
+	bot.on("pre_checkout_query", async (preCheckoutQuery) => {
+		if (
+			!preCheckoutQuery.invoice_payload.startsWith("brezlbot_buy_brezl")
+		) {
+			return;
+		}
 
 		if (!config.bot.paymentProviderToken) {
 			await bot.answerPreCheckoutQuery(preCheckoutQuery.id, false, {
-				error_message: 'Tut ma leid, i konn aktuell leida koa Zahlungen akzeptiern!'
+				error_message:
+					"Tut ma leid, i konn aktuell leida koa Zahlungen akzeptiern!",
 			});
 
 			return;
@@ -15,7 +20,7 @@ export default (bot: TelegramBot) => {
 
 		await bot.answerPreCheckoutQuery(preCheckoutQuery.id, true);
 	});
-}
+};
 
 /*
 {

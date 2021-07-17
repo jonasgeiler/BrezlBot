@@ -1,21 +1,32 @@
-import TelegramBot from 'node-telegram-bot-api';
-import config from '../../config';
-import { getBotId, isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
+import TelegramBot from "node-telegram-bot-api";
+import config from "../../config";
+import {
+	getBotId,
+	isFromUser,
+	isGroupMessage,
+	sendMessage,
+	storeUser,
+} from "../../utils";
 
-export default (bot: TelegramBot) => {
-	bot.on('new_chat_members', async msg => {
-		if (!isGroupMessage(msg)) return;
+export default (bot: TelegramBot): void => {
+	bot.on("new_chat_members", async (msg) => {
+		if (!isGroupMessage(msg)) {
+			return;
+		}
 
 		const botId = await getBotId(bot);
 
-		for (let member of msg.new_chat_members!) {
+		for (const member of msg.new_chat_members) {
 			if (member.id === botId) {
 				// I got invited to a chat!
 
-				if (isFromUser(msg)) storeUser(msg.chat.id, msg.from!);
+				if (isFromUser(msg)) {
+					storeUser(msg.chat.id, msg.from);
+				}
 
 				await sendMessage(
-					bot, msg,
+					bot,
+					msg,
 					`<b>Wos gäd ob, Chat!</b>
 <b>Measse, dass ihr mi hizugfügt hobt!</b>
 
@@ -26,10 +37,10 @@ Ihr kennts mehr üba meine Funktiona eafahrn, indem ihr mi privod kontaktiad.
 <b>Jeda Benutza eahält</b> <code>${config.defaultBrezls}</code> <b>Brezln.</b>
 
 <code>P.S. Funktioniad nua wenn ihr ma Zuagriff auf de Nochrichdn gegem hobt. &#x2764;</code>`,
-					'',
+					"",
 					{
 						remove: false, // Don't remove, as this is an introduction
-						reply:  false, // Can't reply
+						reply: false, // Can't reply
 					},
 				);
 

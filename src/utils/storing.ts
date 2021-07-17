@@ -1,20 +1,22 @@
-import { User } from 'node-telegram-bot-api';
-import config from '../config';
-import { Chats } from '../stores';
-import { Chat, ChatMembers, ChatSettings } from '../types';
+import { User } from "node-telegram-bot-api";
+import config from "../config";
+import { Chats, ChatsEnmap } from "../stores";
+import { Chat, ChatMembers, ChatSettings } from "../types";
 
-export function storeUser(chatId: number, user: User) {
-	if (user.is_bot) return;
+export function storeUser(chatId: number, user: User): void {
+	if (user.is_bot) {
+		return;
+	}
 
-	const members: ChatMembers = Chats.get(chatId.toString(), 'members');
+	const members: ChatMembers = Chats.get(chatId.toString(), "members");
 
 	let name: string;
 
 	if (user.username) {
-		name = '@' + user.username;
+		name = "@" + user.username;
 	} else {
 		if (user.last_name) {
-			name = user.first_name + ' ' + user.last_name;
+			name = user.first_name + " " + user.last_name;
 		} else {
 			name = user.first_name;
 		}
@@ -23,8 +25,8 @@ export function storeUser(chatId: number, user: User) {
 	if (!members[user.id]) {
 		// Add member
 		members[user.id] = {
-			id:          user.id,
-			brezls:      config.defaultBrezls,
+			id: user.id,
+			brezls: config.defaultBrezls,
 			lastRobbery: 0,
 			name,
 		};
@@ -37,26 +39,35 @@ export function storeUser(chatId: number, user: User) {
 	}
 
 	// Update members
-	Chats.set(chatId.toString(), members, 'members');
+	Chats.set(chatId.toString(), members, "members");
 }
 
-
 export const getChat = (chatId: number): Chat => Chats.get(chatId.toString());
-export const deleteChat = (chatId: number): void => Chats.delete(chatId.toString());
-export const chatExists = (chatId: number): boolean => Chats.has(chatId.toString());
+export const deleteChat = (chatId: number): ChatsEnmap =>
+	Chats.delete(chatId.toString());
+export const chatExists = (chatId: number): boolean =>
+	Chats.has(chatId.toString());
 
+export const getMembers = (chatId: number): ChatMembers =>
+	Chats.get(chatId.toString(), "members");
+export const setMembers = (chatId: number, members: ChatMembers): ChatsEnmap =>
+	Chats.set(chatId.toString(), members, "members");
 
-export const getMembers = (chatId: number): ChatMembers => Chats.get(chatId.toString(), 'members');
-export const setMembers = (chatId: number, members: ChatMembers): void => Chats.set(chatId.toString(), members, 'members');
+export const getSettings = (chatId: number): ChatSettings =>
+	Chats.get(chatId.toString(), "settings");
+export const setSettings = (
+	chatId: number,
+	settings: ChatSettings,
+): ChatsEnmap => Chats.set(chatId.toString(), settings, "settings");
 
+export const getBrezls = (chatId: number, userId: number): number =>
+	getMembers(chatId)[userId]?.brezls;
 
-export const getSettings = (chatId: number): ChatSettings => Chats.get(chatId.toString(), 'settings');
-export const setSettings = (chatId: number, settings: ChatSettings): void => Chats.set(chatId.toString(), settings, 'settings');
-
-
-export const getBrezls = (chatId: number, userId: number): number => getMembers(chatId)[userId]?.brezls;
-
-export function setBrezls(chatId: number, userId: number, brezls: number): void {
+export function setBrezls(
+	chatId: number,
+	userId: number,
+	brezls: number,
+): void {
 	if (brezls > 0 && brezls < Number.MAX_SAFE_INTEGER) {
 		const members = getMembers(chatId);
 
@@ -66,10 +77,14 @@ export function setBrezls(chatId: number, userId: number, brezls: number): void 
 	}
 }
 
+export const getLastRobbery = (chatId: number, userId: number): number =>
+	getMembers(chatId)[userId]?.lastRobbery;
 
-export const getLastRobbery = (chatId: number, userId: number): number => getMembers(chatId)[userId]?.lastRobbery;
-
-export function setLastRobbery(chatId: number, userId: number, lastRobbery: number) {
+export function setLastRobbery(
+	chatId: number,
+	userId: number,
+	lastRobbery: number,
+): void {
 	const members = getMembers(chatId);
 
 	members[userId].lastRobbery = lastRobbery;

@@ -1,7 +1,7 @@
-import { scheduleJob } from '../utils';
+import { scheduleJob } from "../utils";
 
-export default () => {
-	scheduleJob('24h', () => {
-		console.log('Inflate!');
+export default (): void => {
+	scheduleJob("24h", () => {
+		console.log("Inflate!");
 	});
 };

@@ -1,24 +1,34 @@
-import type TelegramBot from 'node-telegram-bot-api';
-import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage } from '../../utils';
+import type TelegramBot from "node-telegram-bot-api";
+import {
+	commandRegex,
+	isForwarded,
+	isFromUser,
+	isGroupMessage,
+	sendMessage,
+} from "../../utils";
 
-export default (bot: TelegramBot) => {
-	bot.onText(commandRegex('hilfe'), async msg => {
-		if (!isFromUser(msg) || isForwarded(msg)) return;
+export default (bot: TelegramBot): void => {
+	bot.onText(commandRegex("hilfe"), async (msg) => {
+		if (!isFromUser(msg) || isForwarded(msg)) {
+			return;
+		}
 
 		if (isGroupMessage(msg)) {
 			await sendMessage(
-				bot, msg,
+				bot,
+				msg,
 				`<b>Des gäd nua im privadn Chat!</b>
 Klicke <a href="https://t.me/brezlbot">hia</a> um oan zua stardn.`,
 				`Waarad oafach zua vui fia Gruppnchats... &#x1F937;`,
-				{ removeButtonText: 'Okay' },
+				{ removeButtonText: "Okay" },
 			);
 
 			return;
 		}
 
 		await sendMessage(
-			bot, msg,
+			bot,
+			msg,
 			`<b>Foigends konn i doa:</b>
 (nua in Gruppn)
 
@@ -41,11 +51,11 @@ Klicke <a href="https://t.me/brezlbot">hia</a> um oan zua stardn.`,
 /hilfe - &#x1F691; Zeigt den Hilfe-Text an, mid oin Kommandos de i beherrsche
 
 <i>Wenn du mi aus da Gruppn wirfst, wern olle Brezl-Dadn fia den Chat gelöscht. Oan solchn Schoassdreck konn i oafach ned vazeihn!!!</i>`,
-			'',
+			"",
 			{
-				remove:       false, // Don't remove message
-				private:      true, // Respond to message in private chat
+				remove: false, // Don't remove message
+				private: true, // Respond to message in private chat
 			},
 		);
 	});
-}
+};

@@ -1,66 +1,77 @@
-import TelegramBot, { InlineKeyboardMarkup, Message } from 'node-telegram-bot-api';
-import { Chats } from '../stores';
-import { wait } from './other';
+import TelegramBot, {
+	InlineKeyboardMarkup,
+	Message,
+} from "node-telegram-bot-api";
+import { Chats } from "../stores";
+import { wait } from "./other";
 
 interface SendMessageOptions {
 	/**
 	 * Remove after some time when autoHide is enabled or with a inline button
 	 * @default true
 	 */
-	remove?: boolean
+	remove?: boolean;
 
 	/**
 	 * Remove Button text
 	 * @default "Bassd"
 	 */
-	removeButtonText?: string
+	removeButtonText?: string;
 
 	/**
 	 * User ID who can remove the message
 	 * False to disable
 	 * @default msg.from.id
 	 */
-	removeAllowedId?: number | boolean
+	removeAllowedId?: number | boolean;
 
 	/**
 	 * Reply to Message
 	 * @default true
 	 */
-	reply?: boolean
+	reply?: boolean;
 
 	/**
 	 * Respond to message in private
 	 * @default false
 	 */
-	private?: boolean
+	private?: boolean;
 
 	/**
 	 * Overwrite Chat ID
 	 */
-	chatId?: number
+	chatId?: number;
 
 	/**
 	 * Whether to send notification
 	 * @default false
 	 */
-	notification?: boolean
+	notification?: boolean;
 }
 
-export async function sendMessage(bot: TelegramBot, msg: Message, text: string, comment: string = '', options: SendMessageOptions = {}): Promise<Message> {
+export async function sendMessage(
+	bot: TelegramBot,
+	msg: Message,
+	text: string,
+	comment = "",
+	options: SendMessageOptions = {},
+): Promise<Message> {
 	options.remove ??= true; // Remove per default
-	options.removeButtonText ??= 'Bassd'; // Remove per default
-	options.removeAllowedId ??= msg.from!.id; // Can be removed by user who sent the request by default
+	options.removeButtonText ??= "Bassd"; // Remove per default
+	options.removeAllowedId ??= msg.from.id; // Can be removed by user who sent the request by default
 	options.reply ??= true; // Reply per default
 	options.private ??= false; // Don't write private message per default
-	options.chatId ??= options.private ? msg.from!.id : msg.chat.id; // Use same Chat ID per default
+	options.chatId ??= options.private ? msg.from.id : msg.chat.id; // Use same Chat ID per default
 	options.notification ??= false;
 
 	// Use default options in private chat
-	const settings = !options.private ? Chats.get(msg.chat.id.toString(), 'settings') : {
-		sendLess:      false,
-		autoHide:      false,
-		autoHideDelay: 15,
-	};
+	const settings = !options.private
+		? Chats.get(msg.chat.id.toString(), "settings")
+		: {
+				sendLess: false,
+				autoHide: false,
+				autoHideDelay: 15,
+		  };
 
 	if (comment && !settings.sendLess) {
 		text += `\n\n<code>${comment}</code>`;
@@ -68,7 +79,9 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 
 	let reply_markup: InlineKeyboardMarkup | undefined;
 	if (options.remove && !settings.autoHide) {
-		const callback_data = 'brezlbot_confirm_msg' + (options.removeAllowedId ? `:${options.removeAllowedId}` : '');
+		const callback_data =
+			"brezlbot_confirm_msg" +
+			(options.removeAllowedId ? `:${options.removeAllowedId}` : "");
 
 		reply_markup = {
 			inline_keyboard: [
@@ -87,17 +100,13 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 		reply_to_message_id = msg.message_id;
 	}
 
-	const sentMsg = await bot.sendMessage(
-		options.chatId,
-		text,
-		{
-			parse_mode:               'HTML',
-			disable_notification:     !options.notification,
-			disable_web_page_preview: true,
-			reply_to_message_id,
-			reply_markup,
-		},
-	);
+	const sentMsg = await bot.sendMessage(options.chatId, text, {
+		parse_mode: "HTML",
+		disable_notification: !options.notification,
+		disable_web_page_preview: true,
+		reply_to_message_id,
+		reply_markup,
+	});
 
 	if (options.remove && settings.autoHide) {
 		await wait(settings.autoHideDelay * 60 * 1000);

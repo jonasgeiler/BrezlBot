@@ -1,14 +1,16 @@
 export function removeAtSign(str: string): string {
-	if (str.startsWith('@')) {
+	if (str.startsWith("@")) {
 		str = str.substr(1);
 	}
 
 	return str;
 }
 
-export const wait = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
+export const wait = (ms: number): Promise<void> =>
+	new Promise((resolve) => setTimeout(resolve, ms));
 
-export const isNumeric = (value: any): boolean => !isNaN(value);
+export const isNumeric = (value: string | number): boolean =>
+	typeof value !== "string" && !isNaN(value);
 
 export function getRandomInt(min: number, max: number): number {
 	min = Math.ceil(min);
