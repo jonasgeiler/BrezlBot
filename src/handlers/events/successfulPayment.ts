@@ -34,6 +34,24 @@ Bitte kontaktiere @Skayo!`,
 
 		// Update brezls
 		const brezls = getBrezls(chatId, msg.from!.id);
+
+		if (brezls + config.brezlPrice > Number.MAX_SAFE_INTEGER) {
+			await sendMessage(
+				bot, msg,
+				`<b>Bisd du deppod! Du hosd scho vui zua vui Brezln und kannst ned mehr empfangn!</b>
+Bitte kontaktiere @Skayo!`,
+				`I glab aa ned dass du no mehr Brezln brauchst! &#x1F605;`,
+				{
+					removeButtonText: 'Wow!',
+					private:          true,
+					notification:     true,
+					remove:           false,
+				},
+			);
+
+			return;
+		}
+
 		setBrezls(chatId, msg.from!.id, brezls + config.brezlPrice);
 
 		await sendMessage(

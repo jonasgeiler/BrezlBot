@@ -1,6 +1,6 @@
 import type TelegramBot from 'node-telegram-bot-api';
 import config from '../../config';
-import { commandRegex, isForwarded, isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
+import { commandRegex, getBrezls, isForwarded, isFromUser, isGroupMessage, sendMessage, storeUser } from '../../utils';
 
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('brezlkaffn'), async msg => {
@@ -15,6 +15,19 @@ export default (bot: TelegramBot) => {
 				`<b>Tut ma leid, i konn aktuell leida koa Zahlungen akzeptiern!</b>`,
 				`I nehme aba gern Brezl an! &#x1F968;`,
 				{ removeButtonText: 'Schade' },
+			);
+
+			return;
+		}
+
+		const brezls = getBrezls(msg.chat.id, msg.from!.id);
+
+		if (brezls + config.brezlPrice > Number.MAX_SAFE_INTEGER) {
+			await sendMessage(
+				bot, msg,
+				`<b>Bisd du deppod! Du hosd scho vui zua vui Brezln und kannst ned mehr empfangn!</b>`,
+				`I glab aa ned dass du no mehr Brezln brauchst! &#x1F605;`,
+				{ removeButtonText: 'Wow!' },
 			);
 
 			return;
