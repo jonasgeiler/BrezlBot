@@ -33,28 +33,39 @@ export default (bot: TelegramBot) => {
 			return;
 		}
 
-		await bot.sendInvoice(
-			msg.from!.id,
-			'A Packung Brezl',
-			`A riesn Packung mid ${config.brezlPrice} köstlichn Brezln fia den "${msg.chat.title}" Chod. Garantierta Freindschoftspreis! Kaffn Sie schnei! Nua so lang da Vorrod reicht!`,
-			`brezlbot_buy_brezl:${msg.chat.id}`,
-			config.bot.paymentProviderToken,
-			'Analvibrator',
-			'EUR',
-			[
-				{ label: 'A Packung Brezl', amount: config.brezlPrice },
-			],
-			{
-				disable_notification: true,
+		try {
+			await bot.sendInvoice(
+				msg.from!.id,
+				'A Packung Brezl',
+				`A riesn Packung mid ${config.brezlPrice} köstlichn Brezln fia den "${msg.chat.title}" Chod. Garantierta Freindschoftspreis! Kaffn Sie schnei! Nua so lang da Vorrod reicht!`,
+				`brezlbot_buy_brezl:${msg.chat.id}`,
+				config.bot.paymentProviderToken,
+				'Analvibrator',
+				'EUR',
+				[
+					{ label: 'A Packung Brezl', amount: config.brezlPrice },
+				],
+				{
+					disable_notification: true,
 
-				max_tip_amount:        1000,
-				suggested_tip_amounts: [100, 250, 500, 1000],
+					max_tip_amount:        1000,
+					suggested_tip_amounts: [100, 250, 500, 1000],
 
-				photo_url:    'https://skayo.dev/images/brezlpackung.png',
-				photo_height: 1959,
-				photo_width:  2670,
-			},
-		);
+					photo_url:    'https://skayo.dev/images/brezlpackung.png',
+					photo_height: 1959,
+					photo_width:  2670,
+				},
+			);
+		} catch (e) {
+			await sendMessage(
+				bot, msg,
+				`<b>I konnte dia leida koa Rechnung senden! &#x1F62D;&#x1F62D;&#x1F62D;</b>
+Möglicherweise musst du east oan privadn Chod mid mia <a href="https://t.me/brezlbot">stardn</a>.`,
+				`I varate aa niemandn wos du mia so privod schreibst &#x1F60F;`
+			);
+
+			return;
+		}
 
 		await sendMessage(
 			bot, msg,
