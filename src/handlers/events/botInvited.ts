@@ -16,10 +16,10 @@ export default (bot: TelegramBot) => {
 
 				await sendMessage(
 					bot, msg,
-					`<b>Wos gäd ob, Chod!</b>
+					`<b>Wos gäd ob, Chat!</b>
 <b>Measse, dass ihr mi hizugfügt hobt!</b>
 
-Vo 'etz an zähle i <i>olle</i> Brezln fia <i>olle</i> Mitgliada in dem Chod.
+Vo 'etz an zähle i <i>olle</i> Brezln fia <i>olle</i> Mitgliada in dem Chat.
 Ihr kennts Brezln teiln, indem ihr auf de Nochrichdn andera Benutza mid am Brezl-Emoji (&#x1F968;) ontwortets oda indem ihr den Benutza (@benutzernama) in oana Nochricht mid am Brezl eawähnt.
 Ihr kennts mehr üba meine Funktiona eafahrn, indem ihr mi privod kontaktiad.
 

@@ -17,7 +17,7 @@ export default (bot: TelegramBot) => {
 					bot, msg,
 					`<b>I wurde aus "${msg.chat.title}" aussegewoafa, oiso wurdn de Dadn üba de Brezln da Benutza gelöscht!</b>
 
-Vuin Dank fia de Einladung in Ihrn Chod - Du kannst mi gern schbada wieda hizufügn.`,
+Vuin Dank fia de Einladung in deim Chat - Du kannst mi gern schbada wieda hizufügn.`,
 					`I hoff i hob nix foisches gmacht! &#x1F97A;`,
 					{
 						private: true, // Respond to message in private chat

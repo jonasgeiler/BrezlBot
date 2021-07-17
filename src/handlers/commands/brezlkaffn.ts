@@ -37,7 +37,7 @@ export default (bot: TelegramBot) => {
 			await bot.sendInvoice(
 				msg.from!.id,
 				'A Packung Brezl',
-				`A riesn Packung mid ${config.brezlPrice} köstlichn Brezln fia den "${msg.chat.title}" Chod. Garantierta Freindschoftspreis! Kaffn Sie schnei! Nua so lang da Vorrod reicht!`,
+				`A riesn Packung mid ${config.brezlPrice} köstlichn Brezln fia den "${msg.chat.title}" Chat. Garantierta Freindschoftspreis! Kaffn Sie schnei! Nua so lang da Vorrod reicht!`,
 				`brezlbot_buy_brezl:${msg.chat.id}`,
 				config.bot.paymentProviderToken,
 				'Analvibrator',
@@ -60,7 +60,7 @@ export default (bot: TelegramBot) => {
 			await sendMessage(
 				bot, msg,
 				`<b>I konnte dia leida koa Rechnung senden! &#x1F62D;&#x1F62D;&#x1F62D;</b>
-Möglicherweise musst du east oan privadn Chod mid mia <a href="https://t.me/brezlbot">stardn</a>.`,
+Möglicherweise musst du east oan privadn Chat mid mia <a href="https://t.me/brezlbot">stardn</a>.`,
 				`I varate aa niemandn wos du mia so privod schreibst &#x1F60F;`
 			);
 

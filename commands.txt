@@ -1,4 +1,4 @@
-topbrezler - 🏅 Zeigt de Top Brezler im aktuelln Chod an
+topbrezler - 🏅 Zeigt de Top Brezler im aktuelln Chat an
 meibrezln - 🥨 Zeigt deinen Brezl-Kontostand an
 schbuin - 🎲 Starte a Glücksschbui, bei dem ma Brezl gwinna oda valiarn konn
 brezlfladern - 🏃 Vasuche vo am Brezlstand a boah Brezl zua fladern (gäd nua 1-moi pro Dog)
@@ -6,3 +6,4 @@ brezlkaffn - 💵 Kaufe a riesn Packung mid köstlichn Brezln (echts Gejd)
 gusch - 🤐 Schoidet den Gusch-Modus ein oda aus. Wenn ea eingschoidet is, san manche moana Nochrichdn kürza. (nua fia Administratorn vafügbar)
 schleichdi - 🖕 Schoidet den Schleich-di-Modus ein oda aus. Wenn ea eingschoidet is, vaschwindn manche moana Nochrichdn noch oana bestimmdn Zeid. (nua fia Administratorn vafügbar)
 schleichdi_wartezeid - ⏱ Stäit a noch wia vuin Minudn de Nochrichdn vaschwindn, wenn da Schleich-di-Modus eingschoiden is. (nua fia Administratorn vafügbar)
+hilfe - 🚑 Zeigt den Hilfe-Text an, mid oin Kommandos de i beherrsch

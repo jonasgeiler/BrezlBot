@@ -12,7 +12,7 @@ export default (bot: TelegramBot) => {
 		if (parts.length < 2) {
 			await sendMessage(
 				bot, msg,
-				`<b>Da zuaghearige Chod da Zahlung konnte leida ned eamiddlt wern! &#x1F62C;</b>
+				`<b>Da zuaghearige Chat da Zahlung konnte leida ned eamiddlt wern! &#x1F62C;</b>
 Bitte kontaktiere @Skayo!`,
 				'',
 				{
