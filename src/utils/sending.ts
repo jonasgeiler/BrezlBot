@@ -7,13 +7,13 @@ interface SendMessageOptions {
 	 * Remove after some time when autoHide is enabled or with a inline button
 	 * @default true
 	 */
-	remove?: boolean,
+	remove?: boolean
 
 	/**
 	 * Remove Button text
 	 * @default "Bassd"
 	 */
-	removeButtonText?: string,
+	removeButtonText?: string
 
 	/**
 	 * User ID who can remove the message
@@ -26,13 +26,24 @@ interface SendMessageOptions {
 	 * Reply to Message
 	 * @default true
 	 */
-	reply?: boolean,
+	reply?: boolean
 
 	/**
 	 * Respond to message in private
 	 * @default false
 	 */
-	private?: boolean,
+	private?: boolean
+
+	/**
+	 * Overwrite Chat ID
+	 */
+	chatId?: number
+
+	/**
+	 * Whether to send notification
+	 * @default false
+	 */
+	notification?: boolean
 }
 
 export async function sendMessage(bot: TelegramBot, msg: Message, text: string, comment: string = '', options: SendMessageOptions = {}): Promise<Message> {
@@ -41,6 +52,8 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 	options.removeAllowedId ??= msg.from!.id; // Can be removed by user who sent the request by default
 	options.reply ??= true; // Reply per default
 	options.private ??= false; // Don't write private message per default
+	options.chatId ??= options.private ? msg.from!.id : msg.chat.id; // Use same Chat ID per default
+	options.notification ??= false;
 
 	// Use default options in private chat
 	const settings = !options.private ? Chats.get(msg.chat.id.toString(), 'settings') : {
@@ -74,14 +87,12 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 		reply_to_message_id = msg.message_id;
 	}
 
-	const chatId = options.private ? msg.from!.id : msg.chat.id;
-
 	const sentMsg = await bot.sendMessage(
-		chatId,
+		options.chatId,
 		text,
 		{
 			parse_mode:           'HTML',
-			disable_notification: true,
+			disable_notification: !options.notification,
 			reply_to_message_id,
 			reply_markup,
 		},
@@ -89,7 +100,7 @@ export async function sendMessage(bot: TelegramBot, msg: Message, text: string, 
 
 	if (options.remove && settings.autoHide) {
 		await wait(settings.autoHideDelay * 60 * 1000);
-		await bot.deleteMessage(chatId, sentMsg.message_id.toString());
+		await bot.deleteMessage(options.chatId, sentMsg.message_id.toString());
 	}
 
 	return sentMsg;

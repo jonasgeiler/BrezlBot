@@ -5,7 +5,7 @@ dotenvConfig();
 
 interface BotConfig {
 	/**
-	 * Bot Token
+	 * Bot Token obtained from @BotFather
 	 */
 	token: string,
 
@@ -18,6 +18,11 @@ interface BotConfig {
 	 * Interval between requests in milliseconds
 	 */
 	interval: number,
+
+	/**
+	 * Payment Provider Token obtained from @BotFather
+	 */
+	paymentProviderToken: string,
 }
 
 interface Config {
@@ -35,19 +40,26 @@ interface Config {
 	 * Default brezl amount for every user
 	 */
 	defaultBrezls: number,
+
+	/**
+	 * Price for buying brezls in Cents (yes, real money!)
+	 */
+	brezlPrice: number,
 }
 
 /**
  * Default config
  */
 let config: Config = {
-	bot: {
-		token: '',
-		username: '',
-		interval: 300
+	bot:           {
+		token:                '',
+		username:             '',
+		interval:             300,
+		paymentProviderToken: '',
 	},
-	timezone:            'Europe/London',
-	defaultBrezls:       25,
+	timezone:      'Europe/London',
+	defaultBrezls: 25,
+	brezlPrice:    85,
 };
 
 // Set each environment variable:
@@ -64,8 +76,11 @@ if (process.env.BOT_USERNAME) {
 	process.exit(5);
 }
 if (process.env.BOT_INTERVAL) config.bot.interval = parseInt(process.env.BOT_INTERVAL);
+if (process.env.BOT_PAYMENT_PROVIDER_TOKEN) config.bot.paymentProviderToken = process.env.BOT_PAYMENT_PROVIDER_TOKEN;
+
 if (process.env.TIMEZONE) config.timezone = process.env.TIMEZONE;
 if (process.env.DEFAULT_BREZLS) config.defaultBrezls = parseInt(process.env.DEFAULT_BREZLS);
+if (process.env.BREZL_PRICE) config.brezlPrice = parseInt(process.env.BREZL_PRICE);
 
 // Export
 export default config;

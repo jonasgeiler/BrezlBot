@@ -7,7 +7,7 @@ export default (bot: TelegramBot) => {
 
 		const msg = callbackQuery.message;
 
-		let parts = callbackQuery.data.split(':');
+		const parts = callbackQuery.data.split(':');
 		if (parts.length > 1 && isNumeric(parts[1]) && callbackQuery.from.id !== parseInt(parts[1])) {
 			await bot.answerCallbackQuery(callbackQuery.id, {
 				text: 'Du kannst de Nochricht ned bestätign'
