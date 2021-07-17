@@ -1,6 +1,8 @@
 import type TelegramBot from 'node-telegram-bot-api';
 import { commandRegex, getBrezls, isForwarded, isFromUser, isGroupMessage, sendMessage, setBrezls, storeUser, wait } from '../../utils';
 
+let coolDowns: number[] = [];
+
 export default (bot: TelegramBot) => {
 	bot.onText(commandRegex('schbuin'), async msg => {
 		if (!isGroupMessage(msg) || !isFromUser(msg) || isForwarded(msg)) return;
@@ -22,6 +24,20 @@ Ma konn bis zua <code>3</code> Brezl <b>valiarn</b> und bis zua <code>3</code> <
 
 		bot.onReplyToMessage(msg.chat.id, sentMsg.message_id, async msg => {
 			if (!isGroupMessage(msg) || !isFromUser(msg) || isForwarded(msg) || !msg.dice) return;
+
+			// Check if user is still in cooldown
+			if (coolDowns.includes(msg.from!.id)) {
+				await sendMessage(
+					bot, msg,
+					`<b>Wart a bissal oida!!!</b>`,
+					'', // No comment, should be short no mather what
+					{ removeButtonText: 'Jooo schon guad!' },
+				);
+
+				return;
+			} else {
+				coolDowns.push(msg.from!.id);
+			}
 
 			let brezls = getBrezls(msg.chat.id, msg.from!.id);
 
@@ -90,6 +106,8 @@ Ma konn bis zua <code>3</code> Brezl <b>valiarn</b> und bis zua <code>3</code> <
 				text, comment,
 				{ removeButtonText },
 			);
+
+			coolDowns.splice(coolDowns.indexOf(msg.from!.id), 1); // Remove user ID from cool downs
 		});
 	});
 }
